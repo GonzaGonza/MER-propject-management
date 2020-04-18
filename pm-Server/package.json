@@ -22,7 +22,7 @@
     "express": "~4.16.1",
     "express-session": "^1.17.1",
     "json-parser": "^3.1.2",
-    "mongoose": "^5.5.9",
+    "mongoose": "^5.7.5",
     "morgan": "~1.9.1",
     "multer-storage-cloudinary": "^2.2.1",
     "node-gyp": "^6.1.0"
