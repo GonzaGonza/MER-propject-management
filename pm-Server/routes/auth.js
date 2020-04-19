@@ -16,7 +16,7 @@ const {
 
 //POST '/auth/signup'
 router.post('/signup', isNotLoggedIn, validationLogin, async (req, res, next) => {
-  cont { username, password, email } = req.body;
+  const { username, password, email } = req.body;
 
   try {
     const usernameExists = await User.findOne( { username },'username');
@@ -103,7 +103,7 @@ router.post("/edit" , isLoggedIn, (req, res, next) => {
 })
 
 //GET '/auth/admin'
-router.get('/admin', isLoggedIn, isAdmin, (req, res next) => {
+router.get('/admin', isLoggedIn, isAdmin, (req, res, next) => {
   const currentUserSessionData = req.session.currentUser;
   currentUserSessionData.password = '****';
 

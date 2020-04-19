@@ -1,43 +1,107 @@
 const express = require('express');
 const path = require('path');
+const logger = require ("morgan");
 const cookieParser = require('cookie-parser');
-const logger = require('morgan');
-const mongoose     = require('mongoose');
+const bodyParser = require("body-parser");
+const mongoose = require('mongoose');
+const session = require("express-session");
+const MongoStore = require("connect-mongo")(session);
 const cors = require('cors');
+require("dotenv").config();
 
+//ROUTES
+const authRouter = require("./routes/auth");
 const projectRouter = require('./routes/project-routes');
 const taskRouter = require('./routes/task-routes');
 
-const app = express();
 
 // MONGOOSE CONNECTION
 mongoose
-  .connect('mongodb://localhost/project-management-server', {useNewUrlParser: true})
-  .then(x => {
-    console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`)
+  // .connect('mongodb://localhost/project-management-server', {useNewUrlParser: true})
+  .connect(process.env.MONGODB_URI, {
+    keepAlive:true,
+    useNewUrlParser:true,
+    reconnectTries:Number.MAX_VALUE,
+    useFindAndModify:false
   })
+  .then(() => console.log(`Connected to Mongo database ! `))
   .catch(err => {
     console.error('Error connecting to mongo', err)
   });
 
 app.disable('etag');
 
-// MIDDLEWARE SETUP
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+
+//EXPRESS SERVER INSTANCE
+const app = express();
 
 
 // CORS SETTINGS TO ALLOW CROSS-ORIGIN INTERACTION:
-app.use(cors({
-  origin: ['http://localhost:3000'] // <== this will be the URL of the React app (it will be running on port 3000)
-}));
+// app.use(cors({
+//   origin: ['http://localhost:3000'] // <== this will be the URL of the React app (it will be running on port 3000)
+// }));
+// =====>EDIT CORS LATER TO FOLLOWING CONFIGURATION
+app.use(
+  cors({
+    credentials: true,
+    origin: [process.env.PUBLIC_DOMAIN]
+  })
+);
 
-// ROUTES MIDDLEWARE:
+
+// SESSION MIDDLEWARE
+app.use(
+  session({
+    store: new MongoStore({
+      mongooseConnection: mongoose.connection,
+      ttl: 24 * 60 * 60 * 7 // 7 days
+    }),
+    secret: process.env.SECRET_SESSION,
+    resave: true,
+    saveUninitialized:true,
+    cookie: {
+      maxAge: 24 * 60 * 60 * 365
+    }
+  })
+)
+
+
+// MIDDLEWARE SETUP
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+
+// ROUTER MIDDLEWARE:
+app.use('/api', authRouter);
 app.use('/api', projectRouter);
 app.use('/api', taskRouter);
+
+
+//404
+//catch 404 and forward to error handler
+app.use((req, res, next) => {
+  res.status(404).json({ code: "not found" });
+});
+
+
+//ERROR HANDLER
+app.use( (err, req, res, next) => {
+  //always log the error
+  console.log("ERROR", req.method, req.path, err);
+  
+  // only send the error if the error ocurred before sending the response
+  // (don't try to send the response after it has already been sent)
+  if (!res.headersSent) {
+    const statusError = err.status || "500";
+    res.status(statusError).json(err);
+  }
+});
 
 
 module.exports = app;
