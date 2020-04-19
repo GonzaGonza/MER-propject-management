@@ -6,7 +6,8 @@ const userSchema = new Schema(
     username: {type: String, required: true, unique:true},
     password: {type: String, required: true },
     email: {type: String, required:true, unique: true },
-    projects: [{ type: Schema.Types.ObjectId, ref: "Project" }]
+    projects: [{ type: Schema.Types.ObjectId, ref: "Project" }],
+    isAdmin: { type: Boolean, required: true, default: false }
   }, 
   {
     timestamps: {
