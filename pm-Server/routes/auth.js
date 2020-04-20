@@ -86,20 +86,36 @@ router.get('/me', isLoggedIn, (req, res, next) => {
   res.status(200).json(currentUserSessionData);
 });
 
-router.post("/edit" , isLoggedIn, (req, res, next) => {
-  const { username, email, password } = req.body;
-  const {id} = req.sesssion.currentUser;
-  User.findByIdAndUpdate({id}, {$set : { username, email, password }}, {new:true} )
-  .then((updatedUser) => {
-    res
-    .status(200)
-    .json(updatedUser)
-  })
-  .catch((err) => {
-    res
-    .status(500)
-    .json(err);
-  });
+router.post("/edit", isLoggedIn, (req, res, next) => {
+  const {
+    username,
+    email,
+    password
+  } = req.body;
+  const {
+    _id
+  } = req.session.currentUser;
+  User.findByIdAndUpdate({
+      _id
+    }, {
+      $set: {
+        username,
+        email,
+        password
+      }
+    }, {
+      new: true
+    })
+    .then((updatedUser) => {
+      res
+        .status(200)
+        .json(updatedUser);
+    })
+    .catch((err) => {
+      res
+        .status(500)
+        .json(err);
+    });
 })
 
 //GET '/auth/admin'
@@ -109,5 +125,6 @@ router.get('/admin', isLoggedIn, isAdmin, (req, res, next) => {
 
   res.status(200).json(currentUserSessionData);
 });
+;
 
 module.exports = router;

@@ -10,9 +10,9 @@ const cors = require('cors');
 require("dotenv").config();
 
 //ROUTES
-const authRouter = require("./routes/auth");
-const projectRouter = require('./routes/project-routes');
-const taskRouter = require('./routes/task-routes');
+const auth = require("./routes/auth");
+const project = require('./routes/project-routes');
+const task = require('./routes/task-routes');
 
 
 // MONGOOSE CONNECTION
@@ -37,16 +37,16 @@ const app = express();
 
 
 // CORS SETTINGS TO ALLOW CROSS-ORIGIN INTERACTION:
-// app.use(cors({
-//   origin: ['http://localhost:3000'] // <== this will be the URL of the React app (it will be running on port 3000)
-// }));
+app.use(cors({
+  origin: ['http://localhost:3000'] // <== this will be the URL of the React app (it will be running on port 3000)
+}));
 // =====>EDIT CORS LATER TO FOLLOWING CONFIGURATION
-app.use(
-  cors({
-    credentials: true,
-    origin: [process.env.PUBLIC_DOMAIN]
-  })
-);
+// app.use(
+//   cors({
+//     credentials: true,
+//     origin: [process.env.PUBLIC_DOMAIN]
+//   })
+// );
 
 
 // SESSION MIDDLEWARE
@@ -71,16 +71,17 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-
 app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 
 // ROUTER MIDDLEWARE:
-app.use('/api', authRouter);
-app.use('/api', projectRouter);
-app.use('/api', taskRouter);
+
+app.use('/"auth', auth);
+app.use('/projects', project);
+app.use('/api/task', task);
 
 
 //404
@@ -90,11 +91,20 @@ app.use((req, res, next) => {
 });
 
 
-//ERROR HANDLER
-app.use( (err, req, res, next) => {
-  //always log the error
-  console.log("ERROR", req.method, req.path, err);
-  
+// 404
+// catch 404 and forward to error handler
+app.use((req, res, next) => {
+  res.status(404).json({
+    code: "not found"
+  });
+});
+
+
+// ERROR HANDLING
+app.use((err, req, res, next) => {
+  // always log the error
+  console.error("ERROR", req.method, req.path, err);
+
   // only send the error if the error ocurred before sending the response
   // (don't try to send the response after it has already been sent)
   if (!res.headersSent) {

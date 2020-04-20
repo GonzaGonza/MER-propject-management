@@ -1,6 +1,6 @@
 // outes/task-routes.js
 const express = require('express');
-const router  = express.Router();
+const taskRouter  = express.Router();
 const mongoose = require('mongoose');
 const Task = require('../models/task-model');
 const Project = require('../models/project-model');
@@ -20,7 +20,7 @@ router.get('/projects/:projectId/tasks/:taskId', (req, res) => {
 
 
 // POST '/api/tasks'      => to create a new task
-router.post('/tasks', (req, res)=>{
+taskRouter.post('/tasks', (req, res)=>{
   const { title, description, projectID } = req.body;
 
   Task.create({
@@ -45,7 +45,7 @@ router.post('/tasks', (req, res)=>{
 
 
 // PUT '/api/tasks/:id'    => to update a specific task
-router.put('/tasks/:id', (req, res) => {
+taskRouter.put('/tasks/:id', (req, res) => {
   const { id } = req.params;
   
   if ( !mongoose.Types.ObjectId.isValid(id) ) {
@@ -88,4 +88,4 @@ router.delete('/tasks/:id', (req, res) => {
     })
 })
 
-module.exports = router;
+module.exports = taskRouter;
