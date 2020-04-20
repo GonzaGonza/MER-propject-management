@@ -6,7 +6,8 @@ import AddProject from './AddProject'; // <== !!!
 
 class ProjectList extends Component {
 	state = { 
-    listOfProjects: [] 
+    listOfProjects: [],
+    user: ""
   };
 
   getAllProjects = () => {
