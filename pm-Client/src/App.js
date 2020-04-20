@@ -36,13 +36,20 @@ class App extends Component {
 
           {/* User Routes */}
           <PrivateRoute exact path="/profilePage" component={ProfilePage} />
-          
+          <PrivateRoute exact path="/projects" component={ProjectList} />
 
 
 
           <Route exact path="/projects" component={ProjectList}/>
           <Route exact path="/projects/:id" component={ProjectDetails} />
           <Route exact path="/projects/:id/tasks/:taskId" component={TaskDetails} /> 
+        
+          {/* Admin routes */}
+          {/* <PrivateRoute exact path= "/adminPage" component={AdminPage} />
+          <PrivateRoute exact path= "/adminAddProduct" component={AdminAddProduct} />
+          <PrivateRoute exact path= "/adminEditProduct" component={AdminEditProduct} /> */}
+        {/* <PrivateRoute exact path="/private" component={Private} /> */}
+        
         </Switch>
       </div>
     );
