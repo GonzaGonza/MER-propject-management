@@ -6,19 +6,21 @@ import axios from 'axios';
 // import projects from "../../pm-Server/helpers/middleware"
 
 import Navbar from './components/navbar/Navbar';
-// import Home from './components/Home.js';
+import Home from './components/Home';
 import Login from './components/Login';
 import Signup from './components/Signup';
 
 import AnonRoute from "./components/AnonRoute";
 import PrivateRoute from './components/PrivateRoute';
+
+import ProfilePage from './components/ProfilePage';
 import ProjectList from './components/projects/ProjectList';
 import ProjectDetails from './components/projects/ProjectDetails';
 import TaskDetails from './components/tasks/TaskDetails'
 
 
 class App extends Component {
-  
+
 
   render() {
     return (
@@ -26,6 +28,18 @@ class App extends Component {
         <Navbar />
 
         <Switch>
+          <Route exact path="/" component={Home} />
+
+          {/* Not logged in Routes */}
+          <AnonRoute exact path="/signup" component={Signup} />
+          <AnonRoute exact path="/login" component={Login} />
+
+          {/* User Routes */}
+          <PrivateRoute exact path="/profilePage" component={ProfilePage} />
+          
+
+
+
           <Route exact path="/projects" component={ProjectList}/>
           <Route exact path="/projects/:id" component={ProjectDetails} />
           <Route exact path="/projects/:id/tasks/:taskId" component={TaskDetails} /> 

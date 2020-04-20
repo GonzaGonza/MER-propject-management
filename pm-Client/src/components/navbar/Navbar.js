@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import './Navbar.css'
 // import Higher from '../hoc/Higher.js';
 import { withAuth } from '../../lib/Auth.js';
 
