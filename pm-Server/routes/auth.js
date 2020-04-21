@@ -7,13 +7,11 @@ const User = require ("../models/user-model");
 
 //HELPER FUNCTIONS
 const {
-  isLoggedIn,
-  isNotLoggedIn,
-  validationLogin
-  //isAdmin
+  isLoggedIn, isNotLoggedIn, validationLogin
 } = require("../helpers/middleware");
 
 
+// CREATE USER
 //POST '/auth/signup'
 router.post('/signup', isNotLoggedIn, validationLogin, async (req, res, next) => {
   const { username, password, email } = req.body;
@@ -25,7 +23,7 @@ router.post('/signup', isNotLoggedIn, validationLogin, async (req, res, next) =>
     else {
       const salt = bcrypt.genSaltSync(saltRounds);
       const hashPass = bcrypt.hashSync(password, salt);
-      const newUser = await User.create({ username, password,hashPass, email });
+      const newUser = await User.create({ username, password, hashPass, email, projects });
 
       newUser.password = "***";
       req.session.currentUser = newUser;
@@ -40,6 +38,7 @@ router.post('/signup', isNotLoggedIn, validationLogin, async (req, res, next) =>
 },
 );
 
+// LOGIN USER
 // POST '/auth/login'
 router.post('/login', isNotLoggedIn, validationLogin, async (req, res, next) => {
   const { email, password } = req.body;
@@ -55,8 +54,6 @@ router.post('/login', isNotLoggedIn, validationLogin, async (req, res, next) => 
       res
         .status(200)
         .json(user);
-
-    //return; 
     }
     else {
       next(createError(401)); // Unauthorized
@@ -67,7 +64,6 @@ router.post('/login', isNotLoggedIn, validationLogin, async (req, res, next) => 
   }
 },
 );
-
 
 // POST '/auth/logout;
 router.post('/logout', isLoggedIn, (req, res, next) => {
@@ -87,24 +83,11 @@ router.get('/me', isLoggedIn, (req, res, next) => {
 });
 
 router.post("/edit", isLoggedIn, (req, res, next) => {
-  const {
-    username,
-    email,
-    password
-  } = req.body;
-  const {
-    _id
-  } = req.session.currentUser;
-  User.findByIdAndUpdate({
-      _id
-    }, {
-      $set: {
-        username,
-        email,
-        password
-      }
-    }, {
-      new: true
+  const {  username,  email,  password } = req.body;
+  const { id } = req.session.currentUser;
+  User.findByIdAndUpdate(
+    { _id }, { $set: { username, email, password } },
+    { new: true 
     })
     .then((updatedUser) => {
       res
@@ -125,6 +108,5 @@ router.get('/admin', isLoggedIn, isAdmin, (req, res, next) => {
 
   res.status(200).json(currentUserSessionData);
 });
-;
 
 module.exports = router;

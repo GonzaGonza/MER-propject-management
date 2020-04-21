@@ -67,7 +67,7 @@ taskRouter.put('/tasks/:id', (req, res) => {
 
 
 // DELETE '/api/tasks/:id'     => to delete a specific task
-router.delete('/tasks/:id', (req, res) => {
+taskRouter.delete('/tasks/:id', (req, res) => {
   const { id } = req.params;
 
   if ( !mongoose.Types.ObjectId.isValid(id) ) {

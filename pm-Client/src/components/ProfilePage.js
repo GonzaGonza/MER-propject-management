@@ -13,7 +13,7 @@ class ProfilePage extends Component {
   componentDidMount() {
     const { username, password, email } = this.props.user;
     this.setState({ user: { username, password, email } });
-    // this.pastOrders();
+    this.getAllprojects();
   }
 
   toggleForm = () => {
@@ -35,29 +35,29 @@ class ProfilePage extends Component {
       });
   };
 
-  // pastOrders = () => {
+  // getAllProjects = () => {
   //   axios
-  //     .get(process.env.REACT_APP_API_URL + "/order/allOrders", {
+  //     .get(process.env.REACT_APP_API_URL + "/projects/allProjects", {
   //       withCredentials: true
   //     })
   //     .then(response => {
-  //       let orderProducts = [];
-  //       let orderDetails = [];
-  //       response.data.forEach(oneOrder => {
-  //         if (oneOrder.isDone) {
-  //           oneOrder.orderProducts.map(oneProduct => {
-  //             orderProducts = [
+  //       let projectsTasks = [];
+  //       let projectsDetails = [];
+  //       response.data.forEach(oneprojects => {
+  //         if (oneprojects.isDone) {
+  //           oneprojects.projectsTasks.map(oneProduct => {
+  //             projectsTasks = [
   //               { productInfo: oneProduct.id },
-  //               ...orderProducts
+  //               ...projectsTasks
   //             ];
   //           });
-  //           orderDetails = [
-  //             { orderId: oneOrder._id, orderProducts: orderProducts },
-  //             ...orderDetails
+  //           projectsDetails = [
+  //             { projectsId: oneprojects._id, projectsTasks: projectsTasks },
+  //             ...projectsDetails
   //           ];
   //         }
   //       });
-  //       this.setState({ orders: orderDetails });
+  //       this.setState({ projectss: projectsDetails });
   //     })
   //     .catch(err => {
   //       console.log(err);

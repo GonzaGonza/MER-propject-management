@@ -37,17 +37,16 @@ const app = express();
 
 
 // CORS SETTINGS TO ALLOW CROSS-ORIGIN INTERACTION:
-app.use(cors({
-  origin: ['http://localhost:3000'] // <== this will be the URL of the React app (it will be running on port 3000)
-}));
+// app.use(cors({
+//   origin: ['http://localhost:3000'] // <== this will be the URL of the React app (it will be running on port 3000)
+// }));
 // =====>EDIT CORS LATER TO FOLLOWING CONFIGURATION
-// app.use(
-//   cors({
-//     credentials: true,
-//     origin: [process.env.PUBLIC_DOMAIN]
-//   })
-// );
-
+app.use(
+  cors({
+    credentials: true,
+    origin: [process.env.PUBLIC_DOMAIN]
+  })
+);
 
 // SESSION MIDDLEWARE
 app.use(
@@ -78,10 +77,9 @@ app.use(express.urlencoded({ extended: false }));
 
 
 // ROUTER MIDDLEWARE:
-
 app.use('/"auth', auth);
-app.use('/projects', project);
-app.use('/api/task', task);
+app.use('/projects', projects);
+app.use('/task', task);
 
 
 //404
@@ -89,16 +87,6 @@ app.use('/api/task', task);
 app.use((req, res, next) => {
   res.status(404).json({ code: "not found" });
 });
-
-
-// 404
-// catch 404 and forward to error handler
-app.use((req, res, next) => {
-  res.status(404).json({
-    code: "not found"
-  });
-});
-
 
 // ERROR HANDLING
 app.use((err, req, res, next) => {

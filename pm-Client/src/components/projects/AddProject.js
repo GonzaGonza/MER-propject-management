@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { withRouter } from "react-router-dom";
+import { withAuth } from "../../lib/Auth";
 
 class AddProject extends Component {
   constructor(props){
@@ -12,9 +14,7 @@ class AddProject extends Component {
     const {title, description } = this.state;
     
     // axios.post("http://localhost:5000/api/projects", { title, description })
-      axios.post("http://localhost:5000/api/projects", {
-        title,
-        description
+      axios.post("http://localhost:5000/api/projects", { title, description
       })
       .then( () => {
         this.props.getData();
@@ -52,4 +52,4 @@ class AddProject extends Component {
   }
 }
 
-export default AddProject;
+export default withAuth(withRouter(AddProject));

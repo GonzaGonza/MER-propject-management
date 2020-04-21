@@ -8,6 +8,7 @@ import './Signup.css';
 class Signup extends Component {
   state = {
     username: "",
+    email: "",
     password: ""
   };
 

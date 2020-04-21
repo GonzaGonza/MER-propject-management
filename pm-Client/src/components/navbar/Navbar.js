@@ -24,7 +24,7 @@ class Navbar extends Component {
             <li>Home</li>
           </Link>
           <Link to="/projects" className="nav-btn" id="navbar-links">
-            <li>Projects</li>
+            <li>My Projects</li>
           </Link>
 
           {isLoggedIn && !user.isAdmin ? (

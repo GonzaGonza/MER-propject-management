@@ -38,8 +38,6 @@ class App extends Component {
           <PrivateRoute exact path="/profilePage" component={ProfilePage} />
           <PrivateRoute exact path="/projects" component={ProjectList} />
 
-
-
           <Route exact path="/projects" component={ProjectList}/>
           <Route exact path="/projects/:id" component={ProjectDetails} />
           <Route exact path="/projects/:id/tasks/:taskId" component={TaskDetails} /> 

@@ -4,7 +4,6 @@ import React, { Component } from 'react';
 import authService from "./auth-service";
 const { Consumer, Provider } = React.createContext();
 
-
 //HOC to create a Consumer
 const withAuth = WrappedComponent => {
   return class extends Component {

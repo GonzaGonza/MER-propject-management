@@ -13,7 +13,7 @@ function AnonRoute(props) {
       //exact={exact} path={path}
       {...rest}
       render={function (props) {
-        if (isLoggedIn) return <Redirect to="/private" />;
+        if (isLoggedIn) return <Redirect to="/projects" />;
         else if (!isLoggedIn) return <Component {...props} />;
       }}
     />
