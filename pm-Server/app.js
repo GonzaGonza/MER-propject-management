@@ -11,7 +11,7 @@ require("dotenv").config();
 
 //ROUTES
 const auth = require("./routes/auth");
-const project = require('./routes/project-routes');
+const projects = require('./routes/project-routes');
 const task = require('./routes/task-routes');
 
 
@@ -77,7 +77,7 @@ app.use(express.urlencoded({ extended: false }));
 
 
 // ROUTER MIDDLEWARE:
-app.use('/"auth', auth);
+app.use('/auth/me', auth);
 app.use('/projects', projects);
 app.use('/task', task);
 
